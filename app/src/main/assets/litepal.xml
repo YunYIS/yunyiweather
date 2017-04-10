@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+    <litepal>
+    <dbname value="yunyi_weather"></dbname>
+    <version value="1"></version>
+    <list>
+        <mapping class="com.yunyiweather.android.db.Province"/>
+        <mapping class="com.yunyiweather.android.db.City"/>
+        <mapping class="com.yunyiweather.android.db.County"/>
+    </list>
+</litepal>
