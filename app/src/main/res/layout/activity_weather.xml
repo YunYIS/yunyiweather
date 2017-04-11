@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--由于所有的天气信息都在一个界面显示,所以布局代码会很长,为了不让此布局代码显得混乱不堪,这里使用引入布局技术,
+    即将界面不同的部分写在不同的布局文件中, 再通过引入布局的方式集成到activity_weather.xml中-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+
+    <ScrollView
+        android:id="@+id/weather_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:overScrollMode="never">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/title"/>
+            <include layout="@layout/now"/>
+            <include layout="@layout/forecast"/>
+            <include layout="@layout/aqi"/>
+            <include layout="@layout/suggestion"/>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
