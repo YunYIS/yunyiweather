@@ -22,14 +22,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            Intent intent = new Intent(Intent.ACTION_MAIN); //主启动,不期望接收数据
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //新的activity栈中开启,或者已经存在就调到栈前;
-            intent.addCategory(Intent.CATEGORY_HOME);//添加种类,为设备首次显示的页面;
-            startActivity(intent);
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 }

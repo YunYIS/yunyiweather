@@ -71,7 +71,6 @@ public class WeatherActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_weather);
         //初始化各控件
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
 
         weatherLayout = (ScrollView) findViewById(R.id.weather_layout);
         titleCity = (TextView) findViewById(R.id.title_city);
@@ -109,6 +108,7 @@ public class WeatherActivity extends AppCompatActivity {
                 requestWeather(mWeatherId);
             }
         });
+
         String bingPic = prefs.getString("bing_pic", null);
         if(bingPic != null){
             Glide.with(this).load(bingPic).into(bingPicImg);
@@ -123,32 +123,6 @@ public class WeatherActivity extends AppCompatActivity {
             }
         });
 
-        PagerAdapter pagerAdapter = new PagerAdapter() {
-            @Override
-            public int getCount() {
-                return viewList.size();
-            }
-
-            @Override
-            public boolean isViewFromObject(View view, Object object) {
-                return view == viewList.get((int)Integer.parseInt(object.toString()));
-            }
-
-            @Override
-            public void destroyItem(ViewGroup container, int position, Object object) {
-                container.removeView(viewList.get(position));
-            }
-
-            @Override
-            public Object instantiateItem(ViewGroup container, int position) {
-                container.addView(viewList.get(position));
-                return position;
-            }
-
-
-        };
-
-        viewPager.setAdapter(pagerAdapter);
     }
     /**
      * 处理并展示Weather实体类中的数据
@@ -205,7 +179,7 @@ public class WeatherActivity extends AppCompatActivity {
      */
     public void requestWeather(final String weatherId) {
         String weatherUrl = "http://guolin.tech/api/weather?cityid="+weatherId+"&key=" +
-                "2f8ce6ffd1944061a3f6b15bb2d50b60";
+                "bc0418b57b2d4918819d3974ac1285d9";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
