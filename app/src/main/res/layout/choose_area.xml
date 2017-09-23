@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--选择城市页面布局-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff">
 
+    <!--头布局，标题栏-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -27,6 +29,7 @@
             android:background="@drawable/ic_back"/>
 
     </RelativeLayout>
+    <!--省，城市，县... 列表-->
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
