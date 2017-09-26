@@ -99,7 +99,7 @@ public class AutoUpdateService extends Service {
                             save = responseText+"*";
                         }
                         editor.putString("weather", save);
-                        editor.apply();
+                        editor.commit();
                     }
                 }
             });
