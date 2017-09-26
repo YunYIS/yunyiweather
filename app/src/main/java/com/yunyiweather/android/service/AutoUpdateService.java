@@ -10,6 +10,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import com.bumptech.glide.util.Util;
+import com.yunyiweather.android.WeatherActivity;
 import com.yunyiweather.android.gson.Weather;
 import com.yunyiweather.android.util.HttpUtil;
 import com.yunyiweather.android.util.Utility;
@@ -90,7 +91,14 @@ public class AutoUpdateService extends Service {
                     if(weather != null && weather.status.equals("ok")){
                         SharedPreferences.Editor editor = PreferenceManager
                                 .getDefaultSharedPreferences(AutoUpdateService.this).edit();
-                        editor.putString("weather", responseText);
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(AutoUpdateService.this);
+                        String save = "";
+                        if(prefs.getString("weather", null) != null){
+                            save = prefs.getString("weather", null) + responseText + "*";
+                        }else{
+                            save = responseText+"*";
+                        }
+                        editor.putString("weather", save);
                         editor.apply();
                     }
                 }

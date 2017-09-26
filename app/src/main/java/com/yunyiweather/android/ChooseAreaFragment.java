@@ -89,27 +89,30 @@ public class ChooseAreaFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //当前在选择省份
                 if(currentLevel == LEVEL_PROVINCE){
                     selectedProvince = provinceList.get(position);
                     queryCities();
-                }else if(currentLevel == LEVEL_CITY){
+                }else if(currentLevel == LEVEL_CITY){//当前选择城市
                     selectedCity = cityList.get(position);
                     queryCounties();
-                }else if(currentLevel == LEVEL_COUNTY){
+                }else if(currentLevel == LEVEL_COUNTY){//当前选择县
+                    //获取点击项的weatherId（）
                     String weatherId = countyList.get(position).getWeatherId();
+                    //如果当前是MainActivity（即最初启动是选择城市的时候）
                     if(getActivity() instanceof MainActivity){
                         Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                        Log.d("intent: ", "MainActivity");
-                        intent.putExtra("weather_id", weatherId);
+                        //Log.d("intent: ", "MainActivity");
+                        intent.putExtra("weather_id", weatherId);//启动天气显示界面时，发送weatheId信息
                         startActivity(intent);
-                        getActivity().finish();
+                        getActivity().finish();//关闭当前活动
                     }else if(getActivity() instanceof WeatherActivity){
-                        WeatherActivity activity = (WeatherActivity) getActivity();
-                        activity.drawerLayout.closeDrawers();
-                        activity.swipeRefresh.setRefreshing(true);
-                        Log.d("intent: ", "WeatherActivity");
+                        WeatherActivity activity = (WeatherActivity) getActivity();//获取到WeatherActivity活动的对象
+                        activity.drawerLayout.closeDrawers();//由于当前是通过侧滑菜单来选则城市，所以在选择完成后，要关闭侧滑菜单
+                        activity.swipeRefresh.setRefreshing(true);//更换城市天气信息，需要显示表示正在刷新的进度条
+                        //Log.d("intent: ", "WeatherActivity");
                         new Intent().putExtra("weather_id", weatherId);
-                        activity.requestWeather(weatherId);
+                        activity.requestWeatherMorePager(weatherId);
                     }
                 }
             }
@@ -124,7 +127,7 @@ public class ChooseAreaFragment extends Fragment {
                 }
             }
         });
-        queryProvinces();//开始加载省级数据
+        queryProvinces();//最开始加载省级数据
     }
 
     /**

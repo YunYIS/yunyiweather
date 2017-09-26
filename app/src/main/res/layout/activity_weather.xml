@@ -3,26 +3,11 @@
     即将界面不同的部分写在不同的布局文件中, 再通过引入布局的方式集成到activity_weather.xml中-->
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/framelayout_pager"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/bing_pic_img"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
 
-    <!--实现侧滑菜单-->
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
         <ScrollView
             android:id="@+id/weather_layout"
             android:layout_width="match_parent"
@@ -50,15 +35,4 @@
 
         </ScrollView>
 
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-    <fragment
-        android:id="@+id/choose_area_fragment"
-        android:name="com.yunyiweather.android.ChooseAreaFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity ="start"/>
-
-    </android.support.v4.widget.DrawerLayout>
 </FrameLayout>
