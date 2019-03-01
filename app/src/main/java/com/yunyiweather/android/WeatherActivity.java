@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -129,20 +128,22 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefresh.setOnRefreshListener(new MyswipeRefresh.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //if(weatherInfos == null || weatherInfos[0] == ""){
+                //if(weatherInfos == null || weatherInfos[0] == ""){//此处不能判断，因为必须要实时更新weatherInfo
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
                     String weatherString = prefs.getString("weather", null);//通过键值来获得SharedPreferences对象中存储的数据
+                if(weatherString != null){
                     weatherInfos= weatherString.split("\\*");
-//                    Log.i("swiperefresh", "if");
-                //}
-                Weather weather = Utility.handleWeatherResponse(weatherInfos[viewPager.getCurrentItem()]);
-                Log.i("swiperefresh", "name:"+weather.basic.cityName);
-                Log.i("swiperefresh", "index:"+viewPager.getCurrentItem());
-                mWeatherId = weather.basic.weatherId;
-                for(int i = 0; i < weatherInfos.length; i++){
-                Log.i("swiperefresh", "requestWeather "+i+":" + weatherInfos[i]);}
-                Log.i("swiperefresh", "mWeatherId:"+mWeatherId);
-                requestWeather(mWeatherId);
+                    Weather weather = Utility.handleWeatherResponse(weatherInfos[viewPager.getCurrentItem()]);
+                    mWeatherId = weather.basic.weatherId;
+
+//                    Log.i("swiperefresh", "name:"+weather.basic.cityName);
+//                    Log.i("swiperefresh", "index:"+viewPager.getCurrentItem());
+    //                for(int i = 0; i < weatherInfos.length; i++){
+    //                Log.i("swiperefresh", "requestWeather "+i+":" + weatherInfos[i]);}
+    //                Log.i("swiperefresh", "mWeatherId:"+mWeatherId);
+
+                    requestWeather(mWeatherId);
+                }
             }
         });
 
@@ -207,9 +208,9 @@ public class WeatherActivity extends AppCompatActivity {
                                 break;
                             case R.id.about:
                                 AlertDialog.Builder builder = new AlertDialog.Builder(WeatherActivity.this);
-                                builder.setTitle("  关于...");//设置标题
-                                builder.setIcon(R.mipmap.logo);//设置图标
-                                builder.setMessage("学习之作");//设置对话框内容
+                                builder.setTitle(" 关于...");//设置标题
+                                builder.setIcon(R.mipmap.logo1);//设置图标
+                                builder.setMessage(R.string.about);//设置对话框内容
                                 builder.setNegativeButton("返回", null);
                                 AlertDialog dialog = builder.create();//获取一个对话框
                                 dialog.show();//显示对话框
@@ -235,17 +236,17 @@ public class WeatherActivity extends AppCompatActivity {
                 weather_view = viewList.get(position);
                 widgetInit(weather_view);
 
-                Log.i("viewpager" , "index:"+viewPager.getCurrentItem()+"");
-//                if(weatherInfos == null || weatherInfos[0] == ""){
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
-                    String weatherString = prefs.getString("weather", null);//通过键值来获得SharedPreferences对象中存储的数据
-                    weatherInfos= weatherString.split("\\*");
-               // }
-                //Weather weather = Utility.handleWeatherResponse(weatherInfos[viewPager.getCurrentItem()]);
-                //Log.i("viewpager", "name:"+weather.basic.cityName);
-
-                for(int i = 0; i < weatherInfos.length; i++){
-                    Log.i("viewpager", "requestWeather "+i+":" + weatherInfos[i]);}
+//                Log.i("viewpager" , "index:"+viewPager.getCurrentItem()+"");
+////                if(weatherInfos == null || weatherInfos[0] == ""){
+//                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
+//                    String weatherString = prefs.getString("weather", null);//通过键值来获得SharedPreferences对象中存储的数据
+//                    weatherInfos= weatherString.split("\\*");
+//               // }
+//                //Weather weather = Utility.handleWeatherResponse(weatherInfos[viewPager.getCurrentItem()]);
+//                //Log.i("viewpager", "name:"+weather.basic.cityName);
+//
+//                for(int i = 0; i < weatherInfos.length; i++){
+//                    Log.i("viewpager", "requestWeather "+i+":" + weatherInfos[i]);}
 
                 ScrollListener();
             }
@@ -289,8 +290,10 @@ public class WeatherActivity extends AppCompatActivity {
         });
 
         //每一次进入，默认显示第一个城市的天气
+        if(viewList.size() != 0){
         weather_view = viewList.get(0);
         viewPager.setCurrentItem(0, false);
+        }
     }
 
     @Override
@@ -373,7 +376,7 @@ public class WeatherActivity extends AppCompatActivity {
     public void requestWeather(final String weatherId) {
         //使用参数weatherId和我们申请的APIkey拼接出一个接口地址
         String weatherUrl = "http://guolin.tech/api/weather?cityid="+weatherId+"&key=" +
-                "bc0418b57b2d4918819d3974ac1285d9";
+                "2f8ce6ffd1944061a3f6b15bb2d50b60";
         /**
          * 调用HttpUtil.sendOkHttpRequest()方法（该方法为自己封装的操作OkHttp的方法）向该地址发出请求，
          * 服务器会将响应的天气信息一JSON格式的数据返回
@@ -418,20 +421,34 @@ public class WeatherActivity extends AppCompatActivity {
                              * 3. 向SharedPreferences.Editor对象(即editor)中添加数据(这里添加了一个字符串数据);
                              * 4. 调用commit()方法将添加的数据提交,完成数据存储.
                              */
-                            SharedPreferences.Editor editor = PreferenceManager
-                                    .getDefaultSharedPreferences(WeatherActivity.this).edit();
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
-                            String save = "";
-                            if(prefs.getString("weather", null) != null){
-                                save = prefs.getString("weather", null) + responseText + "*";
-                            }else{
-                                save = responseText+"*";
+                            boolean flag = false;
+
+                             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
+                             String s = prefs.getString("weather", null);//通过键值来获得SharedPreferences对象中存储的数据
+                            if(s != null && s != ""){
+                                String[] ss= s.split("\\*");
+                                for(int i = 0; i < ss.length; i++){
+                                    Weather w = Utility.handleWeatherResponse(ss[i]);
+                                    if(weather.basic.weatherId.equals(w.basic.weatherId)){
+                                        flag = true;
+                                        break;
+                                    }
+                                }
                             }
-                            editor.putString("weather", save);
-                            //解决同步问题（commit()将数据立刻提交到磁盘中）
-                            boolean b = editor.commit();
-                            Log.i("requsetWeather commit:", ""+b);
-//                            Log.i("requsetWeather:", save);
+                            if(flag == false){
+                                String save = "";
+                                if(s != null){
+                                    save = prefs.getString("weather", null) + responseText + "*";
+                                }else{
+                                    save = responseText+"*";
+                                }
+                                SharedPreferences.Editor editor = PreferenceManager
+                                        .getDefaultSharedPreferences(WeatherActivity.this).edit();
+                                editor.putString("weather", save);
+                                //解决同步问题（commit()将数据立刻提交到磁盘中）
+                                /*boolean b = */editor.commit();
+//                                Log.i("requsetWeather commit:", ""+b);//查看是否提交成功
+                            }
                             //显示内容
                             showWeatherInfo(weather);
                         }else{

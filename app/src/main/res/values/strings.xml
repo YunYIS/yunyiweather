@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">云易天气</string>
+    <string name="app_name">云易i天气</string>
+    <string name="about">由于天气网API原因，可能在每天快结束的时候，无法更新天气（╥﹏╥作者没钱买访问量）。\n新手上路，类似CoolWeather项目，加了一些自己的功能，作者（云易）：http://blog.csdn.net/yunyis欢迎交流</string>
 </resources>

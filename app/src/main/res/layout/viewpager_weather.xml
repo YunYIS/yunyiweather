@@ -17,7 +17,7 @@
         android:layout_marginTop="28dp"
         android:layout_alignParentLeft="true"
         android:layout_centerInParent="true"
-        android:alpha="0.5"
+        android:alpha="0.9"
         android:background="@drawable/plus"/>
 
     <!--实现侧滑菜单，DrawerLayout布局-->
